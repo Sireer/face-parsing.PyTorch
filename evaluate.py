@@ -48,7 +48,7 @@ def vis_parsing_maps(im, parsing_anno, stride, save_im=False, save_path='vis_res
 
     vis_parsing_anno_color = vis_parsing_anno_color.astype(np.uint8)
     # print(vis_parsing_anno_color.shape, vis_im.shape)
-    vis_im = cv2.addWeighted(cv2.cvtColor(vis_im, cv2.COLOR_RGB2BGR), 0.4, vis_parsing_anno_color, 0.6, 0)
+    vis_im = vis_parsing_anno_color # cv2.addWeighted(cv2.cvtColor(vis_im, cv2.COLOR_RGB2BGR), 0.4, vis_parsing_anno_color, 0.6, 0)
 
     # Save result or not
     if save_im:
@@ -81,7 +81,7 @@ def evaluate(respth='./res/test_res', dspth='./data', cp='model_final_diss.pth')
             img = img.cuda()
             out = net(img)[0]
             parsing = out.squeeze(0).cpu().numpy().argmax(0)
-
+            print(image_path)
             vis_parsing_maps(image, parsing, stride=1, save_im=True, save_path=osp.join(respth, image_path))
 
 
@@ -92,4 +92,4 @@ def evaluate(respth='./res/test_res', dspth='./data', cp='model_final_diss.pth')
 
 if __name__ == "__main__":
     setup_logger('./res')
-    evaluate()
+    evaluate(respth='~/ffhq/images1024x1024', dspth='~/ffhq/images_mask1024x1024', cp='79999_iter.pth')
