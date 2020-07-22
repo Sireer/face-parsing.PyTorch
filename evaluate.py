@@ -3,24 +3,17 @@
 
 from logger import setup_logger
 from model import BiSeNet
-from face_dataset import FaceMask
 
 import torch
-import torch.nn as nn
-from torch.utils.data import DataLoader
-import torch.nn.functional as F
-import torch.distributed as dist
 
 import os
 import os.path as osp
 import logging
-import time
 import numpy as np
-from tqdm import tqdm
-import math
 from PIL import Image
 import torchvision.transforms as transforms
 import cv2
+
 
 def vis_parsing_maps(im, parsing_anno, stride, save_im=False, save_path='vis_results/parsing_map_on_im.jpg'):
     # Colors for all 20 parts
@@ -37,8 +30,10 @@ def vis_parsing_maps(im, parsing_anno, stride, save_im=False, save_path='vis_res
     im = np.array(im)
     vis_im = im.copy().astype(np.uint8)
     vis_parsing_anno = parsing_anno.copy().astype(np.uint8)
-    vis_parsing_anno = cv2.resize(vis_parsing_anno, None, fx=stride, fy=stride, interpolation=cv2.INTER_NEAREST)
-    vis_parsing_anno_color = np.zeros((vis_parsing_anno.shape[0], vis_parsing_anno.shape[1], 3)) + 255
+    vis_parsing_anno = cv2.resize(
+        vis_parsing_anno, None, fx=stride, fy=stride, interpolation=cv2.INTER_NEAREST)
+    vis_parsing_anno_color = np.zeros(
+        (vis_parsing_anno.shape[0], vis_parsing_anno.shape[1], 3)) + 255
 
     num_of_class = np.max(vis_parsing_anno)
 
@@ -48,7 +43,8 @@ def vis_parsing_maps(im, parsing_anno, stride, save_im=False, save_path='vis_res
 
     vis_parsing_anno_color = vis_parsing_anno_color.astype(np.uint8)
     # print(vis_parsing_anno_color.shape, vis_im.shape)
-    vis_im = vis_parsing_anno_color # cv2.addWeighted(cv2.cvtColor(vis_im, cv2.COLOR_RGB2BGR), 0.4, vis_parsing_anno_color, 0.6, 0)
+    # cv2.addWeighted(cv2.cvtColor(vis_im, cv2.COLOR_RGB2BGR), 0.4, vis_parsing_anno_color, 0.6, 0)
+    vis_im = vis_parsing_anno_color
 
     # Save result or not
     if save_im:
@@ -56,11 +52,12 @@ def vis_parsing_maps(im, parsing_anno, stride, save_im=False, save_path='vis_res
 
     # return vis_im
 
+
 def evaluate(respth='./res/test_res', dspth='./data', cp='model_final_diss.pth'):
 
     if not os.path.exists(respth):
         os.makedirs(respth)
-    
+
     logging.info("Initiating Model")
     n_classes = 19
     net = BiSeNet(n_classes=n_classes)
@@ -86,15 +83,12 @@ def evaluate(respth='./res/test_res', dspth='./data', cp='model_final_diss.pth')
             out = net(img)[0]
             parsing = out.squeeze(0).cpu().numpy().argmax(0)
             print(image_path)
-            vis_parsing_maps(image, parsing, stride=1, save_im=True, save_path=osp.join(respth, image_path))
-
-
-
-
-
+            vis_parsing_maps(image, parsing, stride=1, save_im=True,
+                             save_path=osp.join(respth, image_path))
 
 
 if __name__ == "__main__":
     print("Testing")
     setup_logger('./res')
-    evaluate(dspth='~/ffhq/images1024x1024', respth='~/ffhq/images_mask1024x1024', cp='79999_iter.pth')
+    evaluate(dspth='~/ffhq/images1024x1024',
+             respth='~/ffhq/images_mask1024x1024', cp='79999_iter.pth')
