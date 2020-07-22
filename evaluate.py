@@ -90,5 +90,5 @@ def evaluate(respth='./res/test_res', dspth='./data', cp='model_final_diss.pth')
 if __name__ == "__main__":
     print("Testing")
     setup_logger('./res')
-    evaluate(dspth='~/ffhq/images1024x1024',
-             respth='~/ffhq/images_mask1024x1024', cp='79999_iter.pth')
+    evaluate(dspth='/mnt/lustre/wangzhibo/ffhq/images1024x1024',
+             respth='/mnt/lustre/wangzhibo/ffhq/images_mask1024x1024', cp='79999_iter.pth')
