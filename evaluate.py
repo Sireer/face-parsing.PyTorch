@@ -69,6 +69,7 @@ def evaluate(respth='./res/test_res', dspth='./data', cp='model_final_diss.pth')
 
     logging.info("Start Loading Model")
     net.load_state_dict(torch.load(save_pth))
+    logging.info("Finished Model Loading")
     net.eval()
 
     to_tensor = transforms.Compose([
