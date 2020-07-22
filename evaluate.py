@@ -60,11 +60,14 @@ def evaluate(respth='./res/test_res', dspth='./data', cp='model_final_diss.pth')
 
     if not os.path.exists(respth):
         os.makedirs(respth)
-
+    
+    logging.info("Initiating Model")
     n_classes = 19
     net = BiSeNet(n_classes=n_classes)
     net.cuda()
     save_pth = osp.join('res/cp', cp)
+
+    logging.info("Start Loading Model")
     net.load_state_dict(torch.load(save_pth))
     net.eval()
 
