@@ -74,21 +74,23 @@ def evaluate(respth='./res/test_res', dspth='./data', cp='model_final_diss.pth')
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ])
     with torch.no_grad():
-        for image_path in os.listdir(dspth):
-            img = Image.open(osp.join(dspth, image_path))
-            image = img.resize((512, 512), Image.BILINEAR)
-            img = to_tensor(image)
-            img = torch.unsqueeze(img, 0)
-            img = img.cuda()
-            out = net(img)[0]
-            parsing = out.squeeze(0).cpu().numpy().argmax(0)
-            logging.info(image_path)
-            vis_parsing_maps(image, parsing, stride=1, save_im=True,
-                             save_path=osp.join(respth, image_path))
+        img_list = os.listdir(dspth)
+        img_list.sort()
+        for image_path in img_list:
+            if not os.path.exists(osp.join(respth, image_path)):    
+                img = Image.open(osp.join(dspth, image_path))
+                image = img.resize((512, 512), Image.BILINEAR)
+                img = to_tensor(image)
+                img = torch.unsqueeze(img, 0)
+                img = img.cuda()
+                out = net(img)[0]
+                parsing = out.squeeze(0).cpu().numpy().argmax(0)
+                logging.info(image_path)
+                vis_parsing_maps(image, parsing, stride=1, save_im=True,
+                                save_path=osp.join(respth, image_path))
 
 
 if __name__ == "__main__":
-    print("Testing")
     setup_logger('./res')
     evaluate(dspth='/mnt/lustre/wangzhibo/ffhq/images1024x1024',
              respth='/mnt/lustre/wangzhibo/ffhq/images_mask1024x1024', cp='79999_iter.pth')
