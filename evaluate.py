@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- encoding: utf-8 -*-
 
+import logging
 from logger import setup_logger
 
 logging.info("Starting")
@@ -11,7 +12,6 @@ import torch
 
 import os
 import os.path as osp
-import logging
 import numpy as np
 from PIL import Image
 import torchvision.transforms as transforms
