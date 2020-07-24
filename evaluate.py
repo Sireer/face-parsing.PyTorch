@@ -79,6 +79,7 @@ def evaluate(respth='./res/test_res', dspth='./data', cp='model_final_diss.pth')
         img_list.sort()
         for image_path in img_list:
             if not os.path.exists(osp.join(respth, image_path)):    
+                logging.info(image_path)
                 img = Image.open(osp.join(dspth, image_path))
                 image = img.resize((512, 512), Image.BILINEAR)
                 img = to_tensor(image)
@@ -86,7 +87,6 @@ def evaluate(respth='./res/test_res', dspth='./data', cp='model_final_diss.pth')
                 img = img.cuda()
                 out = net(img)[0]
                 parsing = out.squeeze(0).cpu().numpy().argmax(0)
-                logging.info(image_path)
                 vis_parsing_maps(image, parsing, stride=1, save_im=True,
                                 save_path=osp.join(respth, image_path))
 
