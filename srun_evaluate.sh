@@ -1,1 +1,1 @@
-srun -p ha_face --gres=gpu:1 SH-IDC1-10-5-36-174 /mnt/lustre/wangzhibo/anaconda3/envs/hlrm/bin/python evaluate.py
+srun -p ha_face --gres=gpu:1 --exclude=SH-IDC1-10-5-36-174 /mnt/lustre/wangzhibo/anaconda3/envs/hlrm/bin/python evaluate.py
