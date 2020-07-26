@@ -1,5 +1,6 @@
 import os
 import cv2
+import tqdm
 import matplotlib.pyplot as plt
 
 ffhq_dir = "/mnt/lustre/wangzhibo/ffhq/images1024x1024"
@@ -8,7 +9,7 @@ output_dir = "/mnt/lustre/wangzhibo/ffhq/images_background512x512"
 
 
 os.makedirs(output_dir, exist_ok=True)
-for i in range(70000):
+for i in tqdm.tqdm(range(70000)):
     img = cv2.imread(os.path.join(ffhq_dir, '{:05d}.png').format(i), cv2.IMREAD_UNCHANGED)
     img = cv2.resize(img, (512, 512))
     img_mask = cv2.imread(os.path.join(ffhq_dir, '{:05d}.png').format(i), cv2.IMREAD_UNCHANGED)
