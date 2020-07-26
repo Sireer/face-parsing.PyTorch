@@ -17,5 +17,4 @@ for i in tqdm.tqdm(range(70000)):
     img_mask = ((img_mask[..., 0:1] == 255)*1.0) * ((img_mask[..., 1:2] == 255)*1.0) * ((img_mask[..., 2:3] == 255)*1.0)
     img *= (1-img_mask).astype(np.uint8)
     cv2.imwrite(os.path.join(output_dir, '{:05d}.png'.format(i)), img)
-    break
 
