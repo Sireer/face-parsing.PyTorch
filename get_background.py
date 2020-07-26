@@ -1,6 +1,7 @@
 import os
 import cv2
 import tqdm
+import numpy as np
 import matplotlib.pyplot as plt
 
 ffhq_dir = "/mnt/lustre/wangzhibo/ffhq/images1024x1024"
